@@ -1,0 +1,50 @@
+#yml file always specified in json format key value pair
+version: '3.8'
+
+services:
+
+  hello:
+
+    build:
+
+      context: ./backend/helloService
+
+      dockerfile: Dockerfile
+
+    ports:
+
+      - "3001:3001"
+
+  profile:
+
+    build:
+
+      context: ./backend/profileService
+
+      dockerfile: Dockerfile
+
+    ports:
+
+      - "3002:3002"
+
+  frontend:
+
+    build:
+
+      context: ./frontend
+
+      dockerfile: Dockerfile
+
+    ports:
+
+      - "3000:80"
+
+    depends_on:
+
+      - hello
+
+      - profile
+
+
+
+
