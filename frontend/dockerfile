@@ -22,5 +22,5 @@ EXPOSE 80
 
 
 CMD [ "nginx", "-g", "daemon off;" ]
-# ("-g" run as a global container) ("darmon off" run as a foreground operation)
+# ("-g" run as a global container) ("daemon off" nginx will run as a foreground operation)
 
