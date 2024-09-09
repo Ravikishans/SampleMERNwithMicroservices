@@ -28,3 +28,4 @@ npm start
 ```
 
 Note: This will run the frontend in the development server. To run in production, build the application by running the command `npm run build`
+  
