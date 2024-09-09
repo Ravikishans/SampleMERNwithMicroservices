@@ -10,7 +10,7 @@ services:
       context: ./backend/helloService
 
       dockerfile: Dockerfile
-
+    image: ravikishans/mernmicro:hello
     ports:
 
       - "3001:3001"
@@ -22,7 +22,7 @@ services:
       context: ./backend/profileService
 
       dockerfile: Dockerfile
-
+    image: ravikishans/mernmicro:profile
     ports:
 
       - "3002:3002"
@@ -34,7 +34,7 @@ services:
       context: ./frontend
 
       dockerfile: Dockerfile
-
+    image: ravikishans/mernmicro:frontend
     ports:
 
       - "3000:80"
