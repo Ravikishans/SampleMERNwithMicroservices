@@ -1,0 +1,163 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCOUNT_ID = '975050024946'
+        AWS_REGION = 'ap-northeast-2'
+        ECR_REPO_BACKEND_HELLO = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/rmernmicrobhello"
+        ECR_REPO_BACKEND_PROFILE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/mernmicrobprofile"
+        ECR_REPO_FRONTEND = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/rmernmicrof"
+        DOCKER_IMAGE_TAG = "${env.BUILD_ID}"
+        // KUBECONFIG_CREDENTIAL_ID = '<your-kubeconfig-credential-id>'
+        // K8S_NAMESPACE = 'mern-app'
+        CODECOMMIT_REPO = 'Rmernmicro'
+        CODECOMMIT_BRANCH = 'main'
+    }
+// https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/Rmernmicro
+
+    stages {
+        stage('Checkout Code from CodeCommit') {
+            steps {
+                script {
+                    // Checkout code from CodeCommit repository
+                    sh '''
+                    git config --global credential.helper '!aws codecommit credential-helper $@'
+                    git config --global credential.UseHttpPath true
+                    '''
+                    // credentialsId: 'code-commit-credential',
+                    git branch: "${CODECOMMIT_BRANCH}",
+                        credentialsId: 'code-commit-credential',
+                        url: "https://git-codecommit.${AWS_REGION}.amazonaws.com/v1/repos/${CODECOMMIT_REPO}"
+
+                    sh '''
+                    ls
+                    '''    
+                }
+            }
+        }
+
+        stage('Login to AWS and Docker') {
+            steps {
+                withCredentials([[
+                $class: 'AmazonWebServicesCredentialsBinding',
+                credentialsId: 'aws_credentials'  // Your AWS credentials ID
+                ]]) { 
+                    sh '''
+                    aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+                    aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+                    aws configure set region ${AWS_REGION}
+        
+                    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO_BACKEND_HELLO}
+                    '''
+                }
+            }
+        }
+        
+        stage('Install Docker Compose') {
+            steps {
+                sh '''
+                if ! [ -x "$(command -v docker-compose)" ]; then
+                  sudo curl -L "https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+                fi
+                '''
+            }
+        }
+
+
+        stage('Build and Tag Docker Images using Docker Compose') {
+            steps {
+                script {
+                    // Build images using docker-compose and tag them for ECR
+                    sh '''
+                    /usr/local/bin/docker-compose -f docker-compose.yml build
+        
+                    # Tag the backend and frontend images
+                    docker tag ravikishans/mernmicro:hello ${ECR_REPO_BACKEND_HELLO}:${DOCKER_IMAGE_TAG}
+        
+                    docker tag ravikishans/mernmicro:profile ${ECR_REPO_BACKEND_PROFILE}:${DOCKER_IMAGE_TAG}
+        
+                    docker tag ravikishans/mernmicro:frontend ${ECR_REPO_FRONTEND}:${DOCKER_IMAGE_TAG}
+                    '''
+                }
+            }
+        }
+        stage('Push Docker Images to ECR') {
+            parallel {
+                stage('Push Backend Hello Image') {
+                    steps {
+                        script {
+                            // Push the backend image to ECR
+                            sh '''
+                            docker push ${ECR_REPO_BACKEND_HELLO}:${DOCKER_IMAGE_TAG}
+                            '''
+                        }
+                    }
+                }
+        
+                stage('Push Backend Profile Image') {
+                    steps {
+                        script {
+                            // Push the backend image to ECR
+                            sh '''
+                            docker push ${ECR_REPO_BACKEND_PROFILE}:${DOCKER_IMAGE_TAG}
+                            '''
+                        }
+                    }
+                }
+        
+                stage('Push Frontend Image') {
+                    steps {
+                        script {
+                            // Push the frontend image to ECR
+                            sh '''
+                            docker push ${ECR_REPO_FRONTEND}:${DOCKER_IMAGE_TAG}
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+    //     stage('Deploy to Kubernetes') {
+    //         parallel {
+    //             stage('Deploy Backend') {
+    //                 steps {
+    //                     script {
+    //                         // Deploy the backend using Helm
+    //                         withCredentials([kubeconfigFile(credentialsId: KUBECONFIG_CREDENTIAL_ID, variable: 'KUBECONFIG')]) {
+    //                             sh '''
+    //                             helm upgrade --install backend ./k8s/backend \
+    //                                 --set image.repository=${ECR_REPO_BACKEND} \
+    //                                 --set image.tag=${DOCKER_IMAGE_TAG} \
+    //                                 --namespace ${K8S_NAMESPACE}
+    //                             '''
+    //                         }
+    //                     }
+    //                 }
+    //             }
+
+    //             stage('Deploy Frontend') {
+    //                 steps {
+    //                     script {
+    //                         // Deploy the frontend using Helm
+    //                         withCredentials([kubeconfigFile(credentialsId: KUBECONFIG_CREDENTIAL_ID, variable: 'KUBECONFIG')]) {
+    //                             sh '''
+    //                             helm upgrade --install frontend ./k8s/frontend \
+    //                                 --set image.repository=${ECR_REPO_FRONTEND} \
+    //                                 --set image.tag=${DOCKER_IMAGE_TAG} \
+    //                                 --namespace ${K8S_NAMESPACE}
+    //                             '''
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    }
+
+    post {
+        always {
+            cleanWs() // Clean workspace after the build
+        }
+    }
+}
