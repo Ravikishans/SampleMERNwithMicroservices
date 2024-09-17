@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellodeploy
+  namespace: backendhello
+spec:
+  selector:
+    matchLabels:
+      app: hellodeploy
+  template:
+    metadata:
+      labels:
+        app: hellodeploy
+    spec:
+      containers:
+      - name: hellodeploy
+        image: public.ecr.aws/f8g8h5d4/rmernmicrobhello:hello
+        env:
+        - name: PORT
+          value: "3001"
+        ports:
+        - containerPort: 3001

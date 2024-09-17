@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontenddeployment
+  namespace: frontendmern
+spec:
+  selector:
+    matchLabels:
+      app: mernmicro
+  template:
+    metadata:
+      labels:
+        app: mernmicro
+    spec:
+      containers:
+      - name: frontenddeployment
+        image: public.ecr.aws/f8g8h5d4/rmernmicrof:frontend
+        env:
+        - name: REACT_APP_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: lr-config
+              key: REACT_APP_BACKEND_URL
+        ports:
+        - containerPort: 3000

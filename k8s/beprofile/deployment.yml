@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profiledeploy
+  namespace: backendprofile
+spec:
+  selector:
+    matchLabels:
+      app: profiledeploy
+  template:
+    metadata:
+      labels:
+        app: profiledeploy
+    spec:
+      containers:
+      - name: profiledeploy
+        image: public.ecr.aws/f8g8h5d4/rmernmicrobprofile:profile
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: profile-secret
+              key: MONGO_URI
+        - name: PORT
+          value: "3002"
+        ports:
+        - containerPort: 3002
