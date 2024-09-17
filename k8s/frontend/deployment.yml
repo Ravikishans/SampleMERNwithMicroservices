@@ -16,10 +16,15 @@ spec:
       - name: frontenddeployment
         image: public.ecr.aws/f8g8h5d4/rmernmicrof:frontend
         env:
-        - name: REACT_APP_BACKEND_URL
+        - name: REACT_APP_BACKEND_HELLO_URL
           valueFrom:
             configMapKeyRef:
-              name: lr-config
-              key: REACT_APP_BACKEND_URL
+              name: fe-config
+              key: REACT_APP_BACKEND_HELLO_URL
+        - name: REACT_APP_BACKEND_PROFILE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: fe-config
+              key: REACT_APP_BACKEND_PROFILE_URL
         ports:
         - containerPort: 3000
