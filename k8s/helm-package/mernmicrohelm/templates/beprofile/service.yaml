@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: profileservice
+  namespace: {{ .Values.beprofile.namespace }}
+spec:
+  selector:
+    app: profiledeploy
+  ports:
+  - protocol: {{ .Values.behello.ports.protocol }}
+    port: {{ .Values.beprofile.service.port }}
+    targetPort: {{ .Values.beprofile.ports.containerPort }}

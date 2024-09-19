@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellodeploy
+  namespace: {{ .Values.behello.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: hellodeploy
+  template:
+    metadata:
+      labels:
+        app: hellodeploy
+    spec:
+      containers:
+      - name: hellodeploy
+        image: {{ .Values.behello.image.repository }}:{{ .Values.behello.image.tag }}
+        env:
+        - name: PORT
+          value: "{{ .Values.behello.env.PORT }}"
+        ports:
+        - containerPort: {{ .Values.behello.ports.containerPort }}

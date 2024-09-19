@@ -1,0 +1,13 @@
+#### Claiming the pv space ####
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  namespace: {{ .Values.database.namespace }}
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.database.pvc.storage }}
+  # volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce

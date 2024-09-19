@@ -1,0 +1,50 @@
+behello:
+  namespace: backendhello
+  image:
+    repository: public.ecr.aws/f8g8h5d4/rmernmicrobhello
+    tag: hello
+  replicas: 2
+  env:
+    PORT: "3001"
+  ports:
+    containerPort: 3001
+    protocol: TCP
+  service:
+    port: 3001
+
+beprofile:
+  namespace: backendprofile
+  image:
+    repository: public.ecr.aws/f8g8h5d4/rmernmicrobprofile
+    tag: profile
+  replicas: 2
+  env:
+    MONGO_URL: "mongodb://ravikishan:Cluster0@cluster0.y9zohpu.mongodb.net:27017/sampleNginxLB"
+    PORT: "3002"
+  ports:
+    containerPort: 3002
+    protocol: TCP
+  service:
+    port: 3002
+
+frontend:
+  namespace: frontendmern
+  image:
+    repository: public.ecr.aws/f8g8h5d4/rmernmicrof
+    tag: frontend
+  replicas: 2
+  service:
+    port: 80
+    targetPort: 80
+  data:
+    REACT_APP_BACKEND_HELLO_URL: "http://hello-backend-service:3001"
+    REACT_APP_BACKEND_PROFILE_URL: "http://profile-backend-service:3002"
+
+database:
+  namespace: mernmicrodb
+  pvc:
+    storage: 3Gi
+  service:
+    port: 27017
+    targetPort: 27017
+

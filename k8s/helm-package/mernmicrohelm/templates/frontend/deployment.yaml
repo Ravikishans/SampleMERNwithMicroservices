@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontenddeployment
-  namespace: frontendmern
+  namespace: {{ .Values.frontend.namespace }}
 spec:
   selector:
     matchLabels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontenddeployment
-        image: public.ecr.aws/f8g8h5d4/rmernmicrof:frontend
+        image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
         env:
         - name: REACT_APP_BACKEND_HELLO_URL
           valueFrom:
@@ -27,4 +27,4 @@ spec:
               name: fe-config
               key: REACT_APP_BACKEND_PROFILE_URL
         ports:
-        - containerPort: 80
+        - containerPort: {{ .Values.frontend.service.targetPort }}

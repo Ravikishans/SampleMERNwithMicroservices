@@ -1,0 +1,13 @@
+#### pv.yml will just create the storage #### 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+  namespace: {{ .Values.database.namespace }}
+spec:
+  capacity:
+    storage: {{ .Values.database.pvc.storage }}  
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: /mnt/data

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloservice
+  namespace: {{ .Values.behello.namespace }}
+spec:
+  selector:
+    app: hellodeploy
+  ports:
+  - port: {{ .Values.behello.service.port }}
+    targetPort: {{ .Values.behello.ports.containerPort }}
+    protocol: {{ .Values.behello.ports.protocol }}

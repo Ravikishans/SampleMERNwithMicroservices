@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profiledeploy
+  namespace: {{ .Values.beprofile.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: profiledeploy
+  template:
+    metadata:
+      labels:
+        app: profiledeploy
+    spec:
+      containers:
+      - name: profiledeploy
+        image: {{ .Values.beprofile.image.repository }}:{{ .Values.beprofile.image.tag }}
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: profile-secret
+              key: MONGO_URI
+        - name: PORT
+          value: "{{ .Values.beprofile.env.PORT }}"
+        ports:
+        - containerPort: {{ .Values.beprofile.ports.containerPort}}
