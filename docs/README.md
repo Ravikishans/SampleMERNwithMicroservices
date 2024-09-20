@@ -1,5 +1,3 @@
-Here’s a comprehensive `README.md` for your project. This guide covers setup, deployment, and configuration steps.
-
 ```markdown
 # MERN Application with AWS Microservices
 
@@ -52,31 +50,11 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 1. **Containerize the Application:**
 
-   - **Frontend Dockerfile:**
+   - **Running docker-compose:**
 
-     ```dockerfile
-     # Frontend Dockerfile
-     FROM node:14
-     WORKDIR /app
-     COPY package*.json ./
-     RUN npm install
-     COPY . .
-     EXPOSE 3000
-     CMD ["npm", "start"]
-     ```
-
-   - **Backend Dockerfile:**
-
-     ```dockerfile
-     # Backend Dockerfile
-     FROM node:14
-     WORKDIR /app
-     COPY package*.json ./
-     RUN npm install
-     COPY . .
-     EXPOSE 3001
-     CMD ["npm", "start"]
-     ```
+   ```bash
+   docker-compose build
+   ```
 
 2. **Push Docker Images to Amazon ECR:**
 
@@ -183,22 +161,9 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 ## AWS Lambda Deployment
 
-1. **Create Lambda Functions:**
+1. **Backup Database Script:**
 
-   **Example Python Script:**
-
-   ```python
-   import boto3
-
-   lambda_client = boto3.client('lambda')
-
-   def create_lambda_function():
-       # Create Lambda function for database backup
-   ```
-
-2. **Backup Database Script:**
-
-   **lambda_function.py:**
+   **dblambdabackup.py.py:**
 
    ```python
    import boto3
@@ -228,6 +193,10 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 2. **Deploy Application with Helm:**
 
+   ```bash
+   helm create mernmicrohelm
+   ```
+
    **Example Helm Chart Files:**
 
    - `Chart.yaml`
@@ -238,7 +207,8 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
    **Deploy with Helm:**
 
    ```bash
-   helm install mern-app ./path-to-your-helm-chart
+   helm package mernmicrohelm
+   helm install mernmicrohelm mernmicrohelm-0.1.0.tgz
    ```
 
 ## Monitoring and Logging

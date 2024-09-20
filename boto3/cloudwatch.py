@@ -8,7 +8,7 @@ def create_cloudwatch_rule(lambda_arn, schedule_expression, rule_name):
     try:
         # Create CloudWatch event rule
         response = events_client.put_rule(
-            Name=,
+            Name='S3_Lambda',
             ScheduleExpression='rate(1 day)',  # e.g., 'rate(1 day)' for daily trigger
             State='ENABLED'
         )
@@ -17,7 +17,7 @@ def create_cloudwatch_rule(lambda_arn, schedule_expression, rule_name):
         # Give permission for the rule to invoke the Lambda function
         lambda_client = boto3.client('lambda')
         lambda_client.add_permission(
-            FunctionName=lambda_arn,
+            FunctionName="Rmernmicro",
             StatementId=f"{rule_name}-invoke",
             Action='lambda:InvokeFunction',
             Principal='events.amazonaws.com',
