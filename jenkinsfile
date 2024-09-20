@@ -118,41 +118,6 @@ pipeline {
                 }
             }
         }
-    //     stage('Deploy to Kubernetes') {
-    //         parallel {
-    //             stage('Deploy Backend') {
-    //                 steps {
-    //                     script {
-    //                         // Deploy the backend using Helm
-    //                         withCredentials([kubeconfigFile(credentialsId: KUBECONFIG_CREDENTIAL_ID, variable: 'KUBECONFIG')]) {
-    //                             sh '''
-    //                             helm upgrade --install backend ./k8s/backend \
-    //                                 --set image.repository=${ECR_REPO_BACKEND} \
-    //                                 --set image.tag=${DOCKER_IMAGE_TAG} \
-    //                                 --namespace ${K8S_NAMESPACE}
-    //                             '''
-    //                         }
-    //                     }
-    //                 }
-    //             }
-
-    //             stage('Deploy Frontend') {
-    //                 steps {
-    //                     script {
-    //                         // Deploy the frontend using Helm
-    //                         withCredentials([kubeconfigFile(credentialsId: KUBECONFIG_CREDENTIAL_ID, variable: 'KUBECONFIG')]) {
-    //                             sh '''
-    //                             helm upgrade --install frontend ./k8s/frontend \
-    //                                 --set image.repository=${ECR_REPO_FRONTEND} \
-    //                                 --set image.tag=${DOCKER_IMAGE_TAG} \
-    //                                 --namespace ${K8S_NAMESPACE}
-    //                             '''
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
     }
 
     post {
