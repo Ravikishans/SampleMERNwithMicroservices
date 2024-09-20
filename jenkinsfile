@@ -8,8 +8,6 @@ pipeline {
         ECR_REPO_BACKEND_PROFILE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/mernmicrobprofile"
         ECR_REPO_FRONTEND = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/rmernmicrof"
         DOCKER_IMAGE_TAG = "${env.BUILD_ID}"
-        // KUBECONFIG_CREDENTIAL_ID = '<your-kubeconfig-credential-id>'
-        // K8S_NAMESPACE = 'mern-app'
         CODECOMMIT_REPO = 'Rmernmicro'
         CODECOMMIT_BRANCH = 'main'
     }
