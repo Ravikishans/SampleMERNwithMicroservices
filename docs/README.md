@@ -60,17 +60,22 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
    ```bash
    # Create repositories
-   aws ecr create-repository --repository-name mern-frontend
-   aws ecr create-repository --repository-name mern-backend
+   aws ecr create-repository --repository-name rmernmicrof
+   aws ecr create-repository --repository-name rmernmicrobehello
+   aws ecr create-repository --repository-name rmernmicrobeprofile
 
    # Build and push images
-   docker build -t mern-frontend .
-   docker tag mern-frontend:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/mern-frontend:latest
-   docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/mern-frontend:latest
+   docker build -t rmernmicrof .
+   docker tag rmernmicrof:frontend <aws_account_id>.dkr.ecr.<region>.amazonaws.com/rmernmicrof:frontend
+   docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/rmernmicrof:frontend
 
-   docker build -t mern-backend .
-   docker tag mern-backend:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/mern-backend:latest
-   docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/mern-backend:latest
+   docker build -t rmernmicrohello .
+   docker tag rmernmicrohello:hello <aws_account_id>.dkr.ecr.<region>.amazonaws.com/rmernmicrohello:hello
+   docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/rmernmicrohello:hello
+
+   docker build -t rmernmicroprofile .
+   docker tag rmernmicroprofile:profile <aws_account_id>.dkr.ecr.<region>.amazonaws.com/rmernmicroprofile:profile
+   docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/rmernmicroprofile:profile
    ```
 
 ## Version Control with AWS CodeCommit
@@ -78,7 +83,7 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 1. **Create a CodeCommit Repository:**
 
    ```bash
-   aws codecommit create-repository --repository-name mern-app-repo
+   aws codecommit create-repository --repository-name Rmernmicro
    ```
 
 2. **Push Code to CodeCommit:**
@@ -104,7 +109,7 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 1. **Define Infrastructure:**
 
-   **Example Python Script:**
+   **Example Python Script: vpc.py**
 
    ```python
    import boto3
@@ -117,7 +122,7 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 ## Deploying Backend Services
 
-1. **Deploy Backend on EC2 with ASG:**
+1. **Deploy Backend on EC2 with ASG: asg.py**
 
    **Example Python Script:**
 
@@ -131,7 +136,7 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 ## Networking and DNS Setup
 
-1. **Create Load Balancer:**
+1. **Create Load Balancer: alb.py**
 
    **Example Python Script:**
 
@@ -141,13 +146,16 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
    # Create and configure Elastic Load Balancer
    ```
 
+   screenshots added in the docs folder
+
 2. **Configure DNS:**
 
-   Use Route 53 or another DNS service to set up DNS for your application.
+   Use Route 53 or cloudflare DNS service to set up DNS for your application.
+   "screenshots added in docs folder"
 
 ## Deploying Frontend Services
 
-1. **Deploy Frontend on EC2:**
+1. **Deploy Frontend on EC2: ec2_instance.py**
 
    **Example Python Script:**
 
@@ -158,6 +166,10 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
    # Launch EC2 instances for the frontend
    ```
+
+## AWS implimentation
+all the scripts are added in boto3 folder and for managing them there is
+**infra.py** script   
 
 ## AWS Lambda Deployment
 
@@ -215,40 +227,9 @@ This project demonstrates how to deploy a MERN (MongoDB, Express, React, Node.js
 
 1. **Set Up Monitoring with CloudWatch:**
 
-   **Example Python Script:**
+   screenshots added in the docs folder
 
-   ```python
-   import boto3
 
-   cloudwatch = boto3.client('cloudwatch')
-
-   def create_alarm():
-       # Create CloudWatch alarms
-   ```
-
-2. **Configure Logging with CloudWatch Logs:**
-
-   ```bash
-   sudo yum install -y awslogs
-   sudo vi /etc/awslogs/awslogs.conf
-   sudo service awslogs start
-   ```
-
-## Documentation
-
-1. **Create Documentation:**
-
-   - **Architecture Diagram**
-   - **Deployment Guide**
-   - **Monitoring and Logging Setup**
-
-2. **Upload Documentation to GitHub:**
-
-   ```bash
-   git add docs
-   git commit -m "Added deployment documentation"
-   git push origin main
-   ```
 
 ## Final Checks
 
