@@ -1,6 +1,12 @@
 # SampleMERNwithMicroservices
-docker compose up -d
 
+```
+detailed documentation is added in docs/README.md
+```  
+
+```bash
+docker compose up -d
+```
 # Sample MERN with Microservices
 
 
@@ -29,7 +35,3 @@ npm start
 
 Note: This will run the frontend in the development server. To run in production, build the application by running the command `npm run build`
   
-
-```
-detailed documentation is added in docs
-```  
