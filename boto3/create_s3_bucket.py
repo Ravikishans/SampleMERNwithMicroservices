@@ -1,6 +1,6 @@
 import boto3
 import json
-from botocore.exceptions import ClientError
+
 
 def create_s3_bucket(config):
     s3 = boto3.client('s3', region_name=config['region'])
